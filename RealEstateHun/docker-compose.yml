@@ -1,0 +1,17 @@
+﻿version: '3.8'
+
+services:
+  ingatlan-adatbazis:
+    image: postgres:15 #Megadjuk melyik verziót töltse le
+    container_name: real_estate_postgres
+    environment: #belépési adatok megadása
+      POSTGRES_USER: zsombi_admin
+      POSTGRES_PASSWORD: TitkosJelszo123
+      POSTGRES_DB: real_estate_db
+    ports:
+      - "5432:5432" #Hálózati kapu megadása, ez a PostgreSQL hivatalos portja
+    volumes:
+      - postgres_adatok:/var/lib/postgresql/data #merevlemezen tárolás miatt kell, különben elvesznének az adatok
+
+volumes:
+  postgres_adatok:
