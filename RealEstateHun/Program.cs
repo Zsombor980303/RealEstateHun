@@ -31,8 +31,15 @@ namespace RealEstateHun
         );");
             }
             var ExchangeRateServicesObj = new ExchangeRateService();
-            //await ExchangeRateServicesObj.SzamoldKiANapiAtlagotAsync(DateTime.MinValue); //TO-DO: Máshova tenni, mert jelenle ki kell kommentenem az app.Run-t ha ezt futtatni akarom
-            app.Run();
+            //Elindítjuk a háttérszolgáltatásokat (a Workert) aszinkron módon, nem blokkoló verzióban
+            await app.StartAsync();
+
+            //Kiszámoljuk a napi átlagot az adatbázisból, egyszer
+            var exchangeService = new ExchangeRateService();
+            await exchangeService.SzamoldKiANapiAtlagotAsync(DateTime.MinValue);
+
+            //Biztosítjuk, hogy a konzolablak és a háttérprogram folyamatosan fusson ezután is
+            await app.WaitForShutdownAsync();
         }
     }
 }
