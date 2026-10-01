@@ -20,3 +20,7 @@ A szoftverrendszer három fő, egymástól elkülönülő feladattal bíró komp
 - Hibrid DB Konfiguráció: Az `AppDbContext` kétcsatornás védelmet kapott. A parancssoros migrációs tervezőmotor kiszolgálására a beépített belső vészkapu (`OnConfiguring`) felel, míg éles futáskor a modern Dependency Injection csatornán kapja meg a konfigurációt.
 - Memóriabiztonság háttérprogramokban: A Worker Service-ben az adatbázis-kapcsolat nem él örökké. Minden ciklusban egy rövid életű, elszigetelt `using var db` példány jön létre, ami a mentés után azonnal megsemmisül, így kiküszöböli a memóriaszeszivárgást (Memory Leak).
 - Adattisztítás és Hibatűrés: A Python és C# oldalon is szigorú parser védvonalak (mint a `TryParse` és szöveges minták lefejezése) dobják el a sérült CSV sorokat, megvédve a Docker adatbázist az összeomlástól. Emellett try-catch, try-exception blokkok használata.
+
+# Elérési útvonalak kezelése
+
+A projekt jelenlegi fázisában a C# és a Python környezet közötti integráció fix abszolút útvonalakon keresztül kommunikál. Egy éles, hordozható deployment esetén ezeket a hivatkozásokat relatív útvonalakra kell cserélni, vagy kifejezetten erre dedikált konfigurációs fileokra.
